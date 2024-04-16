@@ -1,0 +1,36 @@
+List<int> numeros = new() { 2, 4, 3, -3, -15, 11, 5, 10, 1 };
+int? menorNumero = null;
+int? maiorNumero = null;
+int numOrdem = 1;
+
+/*foreach (int numero in numeros)
+{
+    if (numero > maiorNumero || maiorNumero is null)
+    {
+        maiorNumero = numero;
+    }
+}
+
+Console.WriteLine($"O maior número da lista é: {maiorNumero}");
+
+foreach (int numero in numeros)
+{
+    if (numero < menorNumero || menorNumero is null)
+    {
+        menorNumero = numero;
+    }
+}
+
+Console.WriteLine($"O menor número da lista é: {menorNumero}");
+*/
+List<int> listaOrdenada = new(numeros);
+foreach (int numero in numeros)
+{
+    if (numero > numOrdem)
+    {
+       listaOrdenada.Add(numOrdem);
+        listaOrdenada.
+    }
+}
+
+
