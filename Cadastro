@@ -1,0 +1,112 @@
+using System;
+using System.Collections.Generic;
+List<Produto> produtos = new();
+
+Console.WriteLine("Cadastro de Produtos!");
+
+while (true)
+{
+    Console.WriteLine("\nDigite uma opção:" +
+        "\n(1) Cadastrar um novo Produto" +
+        "\n(2) Listar todos os Produtos cadastrados" +
+        "\n(3) Excluir um Produto Cadastrado" +
+        "\n(0) Para sair e encerrar o programa");
+
+    string opcao = Console.ReadLine();
+    switch (opcao)
+    {
+
+        case "1":
+            foreach(Produto codigo in produtos)
+            {
+                if (codigo.Codigo < 1 || codigo.Codigo != null)
+                {
+                    codigo.Codigo = 
+                }
+            }
+            
+
+            Produto produto = new(codigo);
+            
+            Console.WriteLine("\nInsira a Descrição do Produto (A Descrição PODE conter Letras, Números e Caracteres Especiais): ");
+            produto.Descricao = Console.ReadLine();
+            produto.ValorCusto = pegarValor("\nInsira o valor de Custo do produto: ");
+            produto.MargemLucro = pegarValor("Insira a Margem de Lucro sobre o Produto: ");
+            double calculoMargem = (produto.ValorCusto * produto.MargemLucro) / 100;
+            produto.ValorVenda = produto.ValorCusto + calculoMargem;
+            Console.WriteLine($"\nO valor final de Venda do Produto é R${produto.ValorVenda}");
+            produtos.Add(produto);
+            break;
+        case "2":
+            foreach (var p in produtos)
+            {
+                Console.WriteLine($"\nCódigo do produto: {p.Codigo}, Descrição: {p.Descricao}; Valor de Venda: R${p.ValorVenda}" +
+                $", Valor de Custo: R${p.ValorCusto}, Margem de Lucro: {p.MargemLucro}%");
+            }
+            break;
+        case "3":
+            Console.WriteLine("\nExclusão de Produtos, Escolha um produtos que você quer excluir, aqui está a lista de produtos:");
+            foreach (var p in produtos)
+            {
+                Console.WriteLine($"\nCódigo do produto: {p.Codigo},\n Descrição: {p.Descricao}");
+            }
+            Console.WriteLine("\nQual produto você deseja excluir(DIGITE O CÓDIGO DO PRODUTO): ");
+            break;
+        case "0":
+            return;
+    }
+
+}
+
+
+
+
+double pegarValor(string texto)
+{
+    double valor;
+    while (true)
+    {
+        Console.WriteLine(texto);
+        string? valorStr = Console.ReadLine();
+        if (double.TryParse(valorStr, out valor))
+        {
+            return valor;
+        }
+        Console.WriteLine("Digite um valor em R$");
+    }
+}
+
+
+public class Produto
+{
+    public Produto(int codigo)
+    {
+        this.Codigo = codigo;
+    }
+
+    public int Codigo { get; set; }
+    public string Descricao { get; set; }
+    public double MargemLucro { get; set; }
+    public double ValorCusto { get; set; }
+    public double ValorVenda { get; set; }
+
+
+}
+
+
+/*int codigo = 0;
+            if(codigo == 0)
+            {
+                for(int i = 0; i < produtos.Count; i++)
+                {
+                    codigo++;
+                }
+            }
+int? maioNumero 0;
+            foreach (int codigo in produtos)
+            {
+                if (codigo > maiorNumero || maiorNumero is null)
+                {
+                    maiorNumero = numero;
+                }
+            }*/
