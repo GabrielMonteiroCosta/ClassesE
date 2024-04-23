@@ -14,6 +14,7 @@ class Program
             Console.WriteLine("\nDigite uma opção:" +
                 "\n(1) Cadastrar um novo Produto" +
                 "\n(2) Listar todos os Produtos cadastrados" +
+                "\n(3) Deletar um produto cadastrado" +
                 "\n(0) Para sair e encerrar o programa");
 
             string opcao = Console.ReadLine();
@@ -27,7 +28,6 @@ class Program
                     ListarProdutos(produtos);
                     break;
                 case "3":
-                    
                     break;
                 default:
                     Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
@@ -49,21 +49,6 @@ class Program
             Console.WriteLine("Digite um valor em R$ válido.");
         }
     }
-    static void ListarProdutos(List<Produto> produtos)
-    {
-        if (produtos.Count == 0)
-        {
-            Console.WriteLine("Nenhum produto cadastrado.");
-            return;
-        }
-
-        Console.WriteLine("Lista de Produtos Cadastrados:");
-        foreach (var produto in produtos)
-        {
-            Console.WriteLine(produto);
-        }
-    }
-
     static void CadastrarProduto(List<Produto> produtos)
     {
         int maxCodigo = 1;
@@ -87,6 +72,20 @@ class Program
         produtos.Add(novoProduto);
         Console.WriteLine($"Produto cadastrado com sucesso: {novoProduto}");
     }
+    static void ListarProdutos(List<Produto> produtos)
+    {
+        if (produtos.Count == 0)
+        {
+            Console.WriteLine("Nenhum produto cadastrado.");
+            return;
+        }
+
+        Console.WriteLine("Lista de Produtos Cadastrados:");
+        foreach (var produto in produtos)
+        {
+            Console.WriteLine(produto);
+        }
+    }
 }
 
 public class Produto
@@ -96,7 +95,7 @@ public class Produto
         this.Codigo = _codigo;
     }
 
-    public int Codigo { get; set; }
+    public int Codigo { get; }
     public string Descricao { get; set; }
     public double ValorVenda { get; set; }
     public double ValorCusto { get; set; }
