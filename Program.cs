@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 class Program
 {
     static void Main(string[] args)
@@ -15,9 +12,15 @@ class Program
                 "\n(1) Cadastrar um novo Produto" +
                 "\n(2) Listar todos os Produtos cadastrados" +
                 "\n(3) Deletar um produto cadastrado" +
-                "\n(0) Para sair e encerrar o programa");
+                "\n(0) Para sair e encerrar o programa\n");
 
             string opcao = Console.ReadLine();
+
+            if (opcao == "0")
+            {
+                Console.WriteLine("O programa foi encerrado com sucesso!");
+                break;
+            }
 
             switch (opcao)
             {
@@ -28,6 +31,8 @@ class Program
                     ListarProdutos(produtos);
                     break;
                 case "3":
+                    ListarProdutos(produtos);
+                    DeletarProduto(produtos);
                     break;
                 default:
                     Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
@@ -54,12 +59,10 @@ class Program
         int maxCodigo = 1;
         foreach (var produto in produtos)
         {
-            if (produto.Codigo > maxCodigo)
+            if (produto.Codigo >= maxCodigo)
             {
-                maxCodigo = produto.Codigo;
-
+                maxCodigo = produto.Codigo + 1;
             }
-            maxCodigo = maxCodigo + 1;
         }
 
         Produto novoProduto = new Produto(maxCodigo);
@@ -80,10 +83,27 @@ class Program
             return;
         }
 
-        Console.WriteLine("Lista de Produtos Cadastrados:");
+        Console.WriteLine("\nLista de Produtos Cadastrados:");
         foreach (var produto in produtos)
         {
             Console.WriteLine(produto);
+        }
+    }
+
+    static void DeletarProduto(List<Produto> produtos)
+    {
+        
+        Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
+        if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
+        {
+            for (int i = 0; i <= produtos.Count; i++)
+            {
+                if (i == codigoDeletado)
+                {
+                    Console.WriteLine($"O código deletado é {codigoDeletado}");
+                    produtos.Remove(codigoDeletado);
+                }
+            }
         }
     }
 }
@@ -103,6 +123,6 @@ public class Produto
 
     public override string ToString()
     {
-        return $"Código: {Codigo}, Descrição: {Descricao}, Valor de Venda: R${ValorVenda}, Valor de Custo: R${ValorCusto}, Margem de Lucro: {MargemLucro}%";
+        return $"\n--------------------\nCódigo: {Codigo} \nDescrição: {Descricao}\nValor de Custo: R${ValorCusto} \nMargem de Lucro: {MargemLucro}%\nValor de Venda: R${ValorVenda}\n--------------------";
     }
 }
