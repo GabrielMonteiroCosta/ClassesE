@@ -92,7 +92,32 @@ class Program
 
     static void DeletarProduto(List<Produto> produtos)
     {
-        
+{
+    Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
+    if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
+    {
+        bool produtoEncontrado = false;
+        for (int i = 0; i < produtos.Count; i++)
+        {
+            if (produtos[i].Codigo == codigoDeletado)
+            {
+                Console.WriteLine($"Produto com código {codigoDeletado} deletado com sucesso.");
+                produtos.RemoveAt(i);
+                produtoEncontrado = true;
+                break;
+            }
+        }
+        if (!produtoEncontrado)
+        {
+            Console.WriteLine($"Produto com código {codigoDeletado} não encontrado.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Por favor, insira um código válido.");
+    }
+}
+
         Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
         if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
         {
