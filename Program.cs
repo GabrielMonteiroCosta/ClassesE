@@ -3,6 +3,7 @@ class Program
     static void Main(string[] args)
     {
         List<Produto> produtos = new List<Produto>();
+        List<String> produtosCad = new() { "Meia Soquete" , "Garrafa de Água" , "Estojo Preto" , " Mouse Gamer" };
 
         Console.WriteLine("Cadastro de Produtos!");
 
@@ -92,41 +93,17 @@ class Program
 
     static void DeletarProduto(List<Produto> produtos)
     {
-{
-    Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
-    if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
-    {
-        bool produtoEncontrado = false;
-        for (int i = 0; i < produtos.Count; i++)
-        {
-            if (produtos[i].Codigo == codigoDeletado)
-            {
-                Console.WriteLine($"Produto com código {codigoDeletado} deletado com sucesso.");
-                produtos.RemoveAt(i);
-                produtoEncontrado = true;
-                break;
-            }
-        }
-        if (!produtoEncontrado)
-        {
-            Console.WriteLine($"Produto com código {codigoDeletado} não encontrado.");
-        }
-    }
-    else
-    {
-        Console.WriteLine("Por favor, insira um código válido.");
-    }
-}
-
+        
         Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
         if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
         {
-            for (int i = 0; i <= produtos.Count; i++)
+            for (int i = 0; i < produtos.Count; i++)
             {
-                if (i == codigoDeletado)
+                if (produtos[i].Codigo == codigoDeletado)
                 {
-                    Console.WriteLine($"O código deletado é {codigoDeletado}");
-                    produtos.Remove(codigoDeletado);
+                    Console.WriteLine($"Produto com código {codigoDeletado} deletado com sucesso.");
+                    produtos.RemoveAt(i);
+                    break;
                 }
             }
         }
@@ -151,39 +128,3 @@ public class Produto
         return $"\n--------------------\nCódigo: {Codigo} \nDescrição: {Descricao}\nValor de Custo: R${ValorCusto} \nMargem de Lucro: {MargemLucro}%\nValor de Venda: R${ValorVenda}\n--------------------";
     }
 }
-
-static void DeletarProduto(List<Produto> produtos)
-{
-    Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
-    if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
-    {
-        int indexDeletado = -1;
-        for (int i = 0; i < produtos.Count; i++)
-        {
-            if (produtos[i].Codigo == codigoDeletado)
-            {
-                Console.WriteLine($"Produto com código {codigoDeletado} deletado com sucesso.");
-                indexDeletado = i;
-                break;
-            }
-        }
-        if (indexDeletado != -1)
-        {
-            produtos.RemoveAt(indexDeletado);
-            // Atualizar os códigos dos produtos restantes
-            for (int i = indexDeletado; i < produtos.Count; i++)
-            {
-                produtos[i].Codigo--;
-            }
-        }
-        else
-        {
-            Console.WriteLine($"Produto com código {codigoDeletado} não encontrado.");
-        }
-    }
-    else
-    {
-        Console.WriteLine("Por favor, insira um código válido.");
-    }
-}
-
