@@ -1,81 +1,109 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics;
-List<Produto> produtos = new();
-Console.WriteLine("Cadastro de Produtos!");
+using System;
+using System.Collections.Generic;
 
-while (true)
+class Program
 {
-    Console.WriteLine("\nDigite uma opção:" +
-        "\n(1) Cadastrar um novo Produto" +
-        "\n(2) Listar todos os Produtos cadastrados" +
-        "\n(0) Para sair e encerrar o programa");
-
-    string opcao = Console.ReadLine();
-
-    switch (opcao)
+    static void Main(string[] args)
     {
-        case "1":
-            int codigo = 1;
-            if (codigo == 1)
-            {
-                codigo = codigo + 1;
-            }
-                    
-            Produto produto = new(codigo);
-            Console.WriteLine("Insira a Descrição do Produto: ");
-            produto.Descricao = Console.ReadLine();
-            produto.ValorCusto = pegarValor("Insira o valor de Custo do produto: ");
-            produto.MargemLucro = pegarValor("Insira a Margem de Lucro sobre o Produto: ");
-            double calculoMargem = (produto.ValorCusto * produto.MargemLucro) / 100;
-            produto.ValorVenda = produto.ValorCusto + calculoMargem;
-            produtos.Add(produto);
-            Console.WriteLine($"Código do produto: {produto.Codigo}, Descrição: {produto.Descricao}; Valor de Venda: R${produto.ValorVenda}" +
-                $", Valor de Custo: R${produto.ValorCusto}, Margem de Lucro: {produto.MargemLucro}%");
-            break;
-        case "2":
+        List<Produto> produtos = new List<Produto>();
 
-            break;
-    }
+        Console.WriteLine("Cadastro de Produtos!");
 
-
-    double pegarValor(string texto)
-    {
-        double valor = transformarValor(texto);
-        return valor;
-
-        double transformarValor(string texto)
+        while (true)
         {
-            while (true)
+            Console.WriteLine("\nDigite uma opção:" +
+                "\n(1) Cadastrar um novo Produto" +
+                "\n(2) Listar todos os Produtos cadastrados" +
+                "\n(0) Para sair e encerrar o programa");
+
+            string opcao = Console.ReadLine();
+
+            switch (opcao)
             {
-                Console.WriteLine(texto);
-                string? valor = Console.ReadLine();
-                if (double.TryParse(valor, out double valorFinal))
-                {
-                    return valorFinal;
-                }
-                Console.WriteLine("Digite um valor em R$");
+                case "1":
+                    CadastrarProduto(produtos);
+                    break;
+                case "2":
+                    ListarProdutos(produtos);
+                    break;
+                case "3":
+                    
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
+                    break;
             }
         }
     }
 
+    static double pegarValor(string texto)
+    {
+        double valor;
+        while (true)
+        {
+            Console.WriteLine(texto);
+            if (double.TryParse(Console.ReadLine(), out valor))
+            {
+                return valor;
+            }
+            Console.WriteLine("Digite um valor em R$ válido.");
+        }
+    }
+    static void ListarProdutos(List<Produto> produtos)
+    {
+        if (produtos.Count == 0)
+        {
+            Console.WriteLine("Nenhum produto cadastrado.");
+            return;
+        }
+
+        Console.WriteLine("Lista de Produtos Cadastrados:");
+        foreach (var produto in produtos)
+        {
+            Console.WriteLine(produto);
+        }
+    }
+
+    static void CadastrarProduto(List<Produto> produtos)
+    {
+        int maxCodigo = 1;
+        foreach (var produto in produtos)
+        {
+            if (produto.Codigo > maxCodigo)
+            {
+                maxCodigo = produto.Codigo;
+
+            }
+            maxCodigo = maxCodigo + 1;
+        }
+
+        Produto novoProduto = new Produto(maxCodigo);
+        Console.WriteLine("Insira a Descrição do Produto: ");
+        novoProduto.Descricao = Console.ReadLine();
+        novoProduto.ValorCusto = pegarValor("Insira o valor de Custo do produto: ");
+        novoProduto.MargemLucro = pegarValor("Insira a Margem de Lucro sobre o Produto: ");
+        double calculoMargem = (novoProduto.ValorCusto * novoProduto.MargemLucro) / 100;
+        novoProduto.ValorVenda = novoProduto.ValorCusto + calculoMargem;
+        produtos.Add(novoProduto);
+        Console.WriteLine($"Produto cadastrado com sucesso: {novoProduto}");
+    }
 }
+
 public class Produto
 {
-
-
     public Produto(int _codigo)
     {
         this.Codigo = _codigo;
     }
 
-    public int Codigo
-    {
-        get;
-    }
+    public int Codigo { get; set; }
     public string Descricao { get; set; }
     public double ValorVenda { get; set; }
     public double ValorCusto { get; set; }
     public double MargemLucro { get; set; }
-    
-    
+
+    public override string ToString()
+    {
+        return $"Código: {Codigo}, Descrição: {Descricao}, Valor de Venda: R${ValorVenda}, Valor de Custo: R${ValorCusto}, Margem de Lucro: {MargemLucro}%";
+    }
 }
