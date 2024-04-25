@@ -3,8 +3,6 @@ class Program
     static void Main(string[] args)
     {
         List<Produto> produtos = new List<Produto>();
-        List<String> produtosCad = new() { "Meia Soquete" , "Garrafa de Água" , "Estojo Preto" , " Mouse Gamer" };
-
         Console.WriteLine("Cadastro de Produtos!");
 
         while (true)
@@ -13,6 +11,7 @@ class Program
                 "\n(1) Cadastrar um novo Produto" +
                 "\n(2) Listar todos os Produtos cadastrados" +
                 "\n(3) Deletar um produto cadastrado" +
+                "\n(4) Atualizar atributos de produtos cadastrados" +
                 "\n(0) Para sair e encerrar o programa\n");
 
             string opcao = Console.ReadLine();
@@ -34,6 +33,9 @@ class Program
                 case "3":
                     ListarProdutos(produtos);
                     DeletarProduto(produtos);
+                    break;
+                    case "4":
+                        AtualizarProduto(produtos);
                     break;
                 default:
                     Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
@@ -93,7 +95,7 @@ class Program
 
     static void DeletarProduto(List<Produto> produtos)
     {
-        
+
         Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
         if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
         {
@@ -108,7 +110,71 @@ class Program
             }
         }
     }
-}
+    static void AtualizarProduto(List<Produto> produtos)
+    {
+
+        if (produtos.Count == 0)
+        {
+            Console.WriteLine("Nenhum produto cadastrado.");
+            return;
+        }
+
+        ListarProdutos(produtos);
+        Console.WriteLine("\nDigite o --código-- do produto que você deseja atualizar: ");
+        if (int.TryParse(Console.ReadLine(), out int codigoAtualizar))
+        {
+            Produto? produtoParaAtualizar = null;
+
+            foreach (var produto in produtos)
+            {
+                if (produto.Codigo == codigoAtualizar)
+                {
+                    produtoParaAtualizar = produto;
+                    break;
+                }
+            }
+
+            if (produtoParaAtualizar != null)
+            {
+                Console.WriteLine("\nQual atributo você deseja atualizar?" +
+                    "\n(1) Descrição" +
+                    "\n(2) Valor de Custo" +
+                    "\n(3) Margem de Lucro");
+
+                string? opcaoAtualizar = Console.ReadLine();
+
+                switch (opcaoAtualizar)
+                {
+                    case "1":
+                        Console.WriteLine("\nInsira a nova descrição do produto: ");
+                        produtoParaAtualizar.Descricao = Console.ReadLine();
+                        Console.WriteLine("Descrição atualizada com sucesso!");
+                        break;
+                    case "2":
+                        produtoParaAtualizar.ValorCusto = pegarValor("\nInsira o novo valor de Custo do produto: ");
+                        Console.WriteLine("Valor de Custo atualizado com sucesso!");
+                        double novoCalculoMargem = (produtoParaAtualizar.ValorCusto * produtoParaAtualizar.MargemLucro) / 100;
+                        produtoParaAtualizar.ValorVenda = produtoParaAtualizar.ValorCusto + novoCalculoMargem;
+                        break;
+                    case "3":
+                        produtoParaAtualizar.MargemLucro = pegarValor("\nInsira a nova Margem de Lucro sobre o Produto: ");
+                        Console.WriteLine("Margem de Lucro atualizada com sucesso!");
+                        double calculoMargem = (produtoParaAtualizar.ValorCusto * produtoParaAtualizar.MargemLucro) / 100;
+                        produtoParaAtualizar.ValorVenda = produtoParaAtualizar.ValorCusto + calculoMargem;
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
+                        break;
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("Produto não encontrado.");
+        }
+            
+        }
+    }
 
 public class Produto
 {
