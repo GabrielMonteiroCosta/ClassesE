@@ -1,3 +1,7 @@
+using System.ComponentModel.Design;
+using System.Data;
+using static Program;
+
 class Program
 {
     static void Main(string[] args)
@@ -7,15 +11,18 @@ class Program
         Console.WriteLine("Cadastro de Produtos!");
 
 
-        // Loop principal do programa - Opções iniciais para o usuário
+        // Loop principal do programa - Opções iniciais para o usuário -
         while (true)
         {
-            Console.WriteLine("\nDigite uma opção:" +
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine(
                 "\n(1) Cadastrar um novo Produto" +
-                "\n(2) Listar todos os Produtos cadastrados" +
-                "\n(3) Deletar um produto cadastrado" +
-                "\n(4) Atualizar atributos de produtos cadastrados" +
+                "\n(2) Listar todos os Produtos Cadastrados" +
+                "\n(3) Deletar um Produto Cadastrado" +
+                "\n(4) Atualizar um Produto já Cadastrado" +
                 "\n(0) Para sair e encerrar o programa\n");
+            Console.WriteLine("----------------------------------------");
+            Console.Write("Selecione a Opção desejada: ");
 
             string opcao = Console.ReadLine();
 
@@ -34,14 +41,13 @@ class Program
                     ListarProdutos(produtos); // Chama o método para listar todos os produtos cadastrados
                     break;
                 case "3":
-                    ListarProdutos(produtos);
                     DeletarProduto(produtos); // Chama o método para deletar um produto cadastrado
                     break;
-                    case "4":
-                        AtualizarProduto(produtos); // Chama o método para atualizar atributos de produtos cadastrados
+                case "4":
+                    AtualizarProduto(produtos); // Chama o método para atualizar atributos de produtos cadastrados
                     break;
                 default:
-                    Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
+                    mensagemPadrão(); // Chama o metódo para mostrar na tela a mensagem padrão de validação
                     break;
             }
         }
@@ -53,12 +59,12 @@ class Program
         double valor;
         while (true)
         {
-            Console.WriteLine(texto);
+            Console.Write(texto);
             if (double.TryParse(Console.ReadLine(), out valor))
             {
                 return valor;
             }
-            Console.WriteLine("Digite um valor em R$ válido.");
+            Console.WriteLine("\nDigite um valor em R$ válido.");
         }
     }
 
@@ -76,14 +82,14 @@ class Program
 
         // Criar um novo produto com o código
         Produto novoProduto = new Produto(maxCodigo);
-        Console.WriteLine("Insira a Descrição do Produto: ");
+        Console.Write("\nInsira a Descrição do Produto: ");
         novoProduto.Descricao = Console.ReadLine();
-        novoProduto.ValorCusto = pegarValor("Insira o valor de Custo do produto: ");
-        novoProduto.MargemLucro = pegarValor("Insira a Margem de Lucro sobre o Produto: ");
+        novoProduto.ValorCusto = pegarValor("\nInsira o valor de Custo do produto: R$");
+        novoProduto.MargemLucro = pegarValor("\nInsira a Margem de Lucro sobre o Produto(Em %): ");
         double calculoMargem = (novoProduto.ValorCusto * novoProduto.MargemLucro) / 100;
         novoProduto.ValorVenda = novoProduto.ValorCusto + calculoMargem;
         produtos.Add(novoProduto);
-        Console.WriteLine($"Produto cadastrado com sucesso: {novoProduto}");
+        Console.WriteLine($"\nProduto cadastrado com sucesso: \n{novoProduto}\n");
     }
 
     // Método para listar todos os produtos cadastrados
@@ -95,7 +101,7 @@ class Program
             return;
         }
 
-        Console.WriteLine("\nLista de Produtos Cadastrados:");
+        Console.WriteLine("\nLista de Produtos Cadastrados:\n");
         foreach (var produto in produtos)
         {
             Console.WriteLine(produto);
@@ -105,10 +111,20 @@ class Program
     // Método para deletar um produto cadastrado
     static void DeletarProduto(List<Produto> produtos)
     {
-
+        if (produtos.Count == 0)
+        {
+            Console.WriteLine("Nenhum produto cadastrado." +
+                "\nPor favor cadastre qualquer produto antes de tentar efetuar uma exclusão.");
+            return;
+        }
         Console.WriteLine("\nDigite o código do produto que você deseja deletar: ");
         if (int.TryParse(Console.ReadLine(), out int codigoDeletado))
         {
+            if (produtos.Count == 0)
+            {
+                Console.WriteLine("Nenhum produto cadastrado.");
+                return;
+            }
             for (int i = 0; i < produtos.Count; i++)
             {
                 if (produtos[i].Codigo == codigoDeletado)
@@ -117,7 +133,12 @@ class Program
                     produtos.RemoveAt(i);
                     break;
                 }
+                else
+                {
+                    Console.WriteLine("Você ainda não tem nenhum produto cadastrado, por favor cadastre antes de efetuar a exclusão!");
+                }
             }
+
         }
     }
 
@@ -127,14 +148,15 @@ class Program
 
         if (produtos.Count == 0)
         {
-            Console.WriteLine("Nenhum produto cadastrado.");
+            Console.WriteLine("Você ainda não tem nenhum produto Cadastrado" +
+                "Por favor cadastre o produto antes de tentar atualizar os atributos dele!");
             return;
         }
-
         ListarProdutos(produtos);
-        Console.WriteLine("\nDigite o --código-- do produto que você deseja atualizar: ");
+        Console.Write("\nDigite o CÓDIGO do produto que você deseja atualizar: ");
         if (int.TryParse(Console.ReadLine(), out int codigoAtualizar))
         {
+
             Produto? produtoParaAtualizar = null;
 
             // Encontrar o produto com o código fornecido
@@ -150,10 +172,13 @@ class Program
             // Se o produto foi encontrado
             if (produtoParaAtualizar != null)
             {
-                Console.WriteLine("\nQual atributo você deseja atualizar?" +
-                    "\n(1) Descrição" +
-                    "\n(2) Valor de Custo" +
-                    "\n(3) Margem de Lucro");
+                Console.Write("" +
+                    "\n(1) Atualizar a Descrição do Produto" +
+                    "\n(2) Atualizar o Valor de Custo do Produto" +
+                    "\n(3) Atualizar a Margem de Lucro Sobre o Produto (Em %)" +
+                    "\n(4) Atualizar o Valor de Venda do Produto" +
+                    "\n(5) Atualizar o Código do Produto" +
+                    "\n\nSelecione a opção para atualizar as informações de um produto: ");
 
                 string? opcaoAtualizar = Console.ReadLine();
 
@@ -162,79 +187,79 @@ class Program
                     case "1":
                         // Armazena a descrição antiga
                         string descricaoAntiga = produtoParaAtualizar.Descricao;
-                        Console.WriteLine("\nInsira a nova descrição do produto: ");
+                        Console.WriteLine($"\nA descrição atual é [{descricaoAntiga}]");
+                        Console.WriteLine("Insira a nova descrição do produto: ");
                         produtoParaAtualizar.Descricao = Console.ReadLine();
                         Console.WriteLine("Descrição atualizada com sucesso!");
                         Console.WriteLine($"Descrição antiga: {descricaoAntiga} ; Nova descrição: {produtoParaAtualizar.Descricao}");
                         break;
                     case "2":
-                        produtoParaAtualizar.ValorCusto = pegarValor("\nInsira o novo valor de Custo do produto: ");
-                        Console.WriteLine("Valor de Custo atualizado com sucesso!");
+                        produtoParaAtualizar.ValorCusto = pegarValor("\nInsira o novo valor de Custo do produto: R$");
+                        Console.WriteLine("Valor de Custo atualizado com sucesso!\nA partir de agora produto tem um novo Valor de Venda" +
+                            " baseado no Valor de Custo atualizado!");
                         double novoCalculoMargem = (produtoParaAtualizar.ValorCusto * produtoParaAtualizar.MargemLucro) / 100;
                         produtoParaAtualizar.ValorVenda = produtoParaAtualizar.ValorCusto + novoCalculoMargem;
                         break;
                     case "3":
-                        produtoParaAtualizar.MargemLucro = pegarValor("\nInsira a nova Margem de Lucro sobre o Produto: ");
+                        produtoParaAtualizar.MargemLucro = pegarValor("\nInsira a nova Margem de Lucro sobre o Produto: (%) ");
                         Console.WriteLine("Margem de Lucro atualizada com sucesso!");
                         double calculoMargem = (produtoParaAtualizar.ValorCusto * produtoParaAtualizar.MargemLucro) / 100;
                         produtoParaAtualizar.ValorVenda = produtoParaAtualizar.ValorCusto + calculoMargem;
                         break;
-                    /*case "4":
-                        AtualizarCodigoProduto(produtos, produtoParaAtualizar);
-                        break;*/
+                    case "4":
+                        double novoValorVenda = pegarValor("\nInsira o novo Valor de Venda do produto: R$");
+                        produtoParaAtualizar.ValorVenda = novoValorVenda;
+                        double novoCalculoVenda = ((produtoParaAtualizar.ValorVenda - produtoParaAtualizar.ValorCusto) / produtoParaAtualizar.ValorCusto) * 100;
+                        produtoParaAtualizar.MargemLucro = novoCalculoVenda;
+
+                        Console.WriteLine("O valor de venda foi alterado com sucesso!");
+                        break;
+                    case "5":
+                        //AtualizarCodigoProduto(produtos, produtoParaAtualizar);
+                        break;
                     default:
                         Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
                         break;
                 }
             }
-        }
-        else
-        {
-            Console.WriteLine("Produto não encontrado.");
-        }
-            
-        }
-    /*static void AtualizarCodigoProduto(List<Produto> produtos, Produto produtoParaAtualizar)
-    {
-        Console.WriteLine("\nInsira o novo código para o produto: ");
-        if (int.TryParse(Console.ReadLine(), out int novoCodigo))
-        {
-            bool codigoExiste = produtos.Exists(p => p.Codigo == novoCodigo);
-            if (!codigoExiste)
-            {
-                produtoParaAtualizar.Codigo = novoCodigo;
-                Console.WriteLine("Código do Produto atualizado com sucesso!");
-            }
             else
             {
-                Console.WriteLine("O novo código de produto já está em uso. Por favor, escolha outro.");
+                Console.WriteLine("Produto não encontrado.");
             }
         }
-        else
-        {
-            Console.WriteLine("Código inválido. Por favor, insira um número inteiro válido.");
-        }
 
-    }*/
+    }
+
+    static void NovoCodigoProduto()
+    {
+        Console.WriteLine("Insira o novo código do produto: ");
+        if (int.TryParse(Console.ReadLine(), out int novoCodigo))
+        {
+            Console.Write("");
+        }
+    }
+    static void mensagemPadrão()
+    {
+        Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
+    }
+
 }
-    
 
 // Classe que representa um Produto, todos os seus getters e setters
 public class Produto
 {
-    //private int codigo;
+    private int codigo;
 
     public Produto(int _codigo)
     {
         this.Codigo = _codigo;
     }
 
-    /*public int Codigo
+    public int Codigo
     {
         get { return codigo; }
         set { codigo = value; }
-    }*/
-    public int Codigo { get; }
+    }
     public string Descricao { get; set; }
     public double ValorVenda { get; set; }
     public double ValorCusto { get; set; }
@@ -243,6 +268,7 @@ public class Produto
     // Sobrescrita do método ToString para formatar a exibição do produto
     public override string ToString()
     {
-        return $"\n--------------------\nCódigo: {Codigo} \nDescrição: {Descricao}\nValor de Custo: R${ValorCusto} \nMargem de Lucro: {MargemLucro}%\nValor de Venda: R${ValorVenda}\n--------------------";
+        return $"\n*************************\nCódigo: {Codigo} \nDescrição: {Descricao}\nValor de Custo: R${ValorCusto} \nMargem de Lucro: {MargemLucro}%\nValor de Venda: R${ValorVenda}\n*************************";
     }
 }
+
