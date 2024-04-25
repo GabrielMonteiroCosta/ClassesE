@@ -2,9 +2,12 @@ class Program
 {
     static void Main(string[] args)
     {
+        // Lista para armazenar os produtos
         List<Produto> produtos = new List<Produto>();
         Console.WriteLine("Cadastro de Produtos!");
 
+
+        // Loop principal do programa - Opções iniciais para o usuário
         while (true)
         {
             Console.WriteLine("\nDigite uma opção:" +
@@ -25,17 +28,17 @@ class Program
             switch (opcao)
             {
                 case "1":
-                    CadastrarProduto(produtos);
+                    CadastrarProduto(produtos); // Chama o método para cadastrar um novo produto
                     break;
                 case "2":
-                    ListarProdutos(produtos);
+                    ListarProdutos(produtos); // Chama o método para listar todos os produtos cadastrados
                     break;
                 case "3":
                     ListarProdutos(produtos);
-                    DeletarProduto(produtos);
+                    DeletarProduto(produtos); // Chama o método para deletar um produto cadastrado
                     break;
                     case "4":
-                        AtualizarProduto(produtos);
+                        AtualizarProduto(produtos); // Chama o método para atualizar atributos de produtos cadastrados
                     break;
                 default:
                     Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
@@ -44,6 +47,7 @@ class Program
         }
     }
 
+    // Método para solicitar e ler um valor numérico do usuário
     static double pegarValor(string texto)
     {
         double valor;
@@ -57,6 +61,8 @@ class Program
             Console.WriteLine("Digite um valor em R$ válido.");
         }
     }
+
+    // Método para cadastrar um novo produto
     static void CadastrarProduto(List<Produto> produtos)
     {
         int maxCodigo = 1;
@@ -68,6 +74,7 @@ class Program
             }
         }
 
+        // Criar um novo produto com o código
         Produto novoProduto = new Produto(maxCodigo);
         Console.WriteLine("Insira a Descrição do Produto: ");
         novoProduto.Descricao = Console.ReadLine();
@@ -78,6 +85,8 @@ class Program
         produtos.Add(novoProduto);
         Console.WriteLine($"Produto cadastrado com sucesso: {novoProduto}");
     }
+
+    // Método para listar todos os produtos cadastrados
     static void ListarProdutos(List<Produto> produtos)
     {
         if (produtos.Count == 0)
@@ -93,6 +102,7 @@ class Program
         }
     }
 
+    // Método para deletar um produto cadastrado
     static void DeletarProduto(List<Produto> produtos)
     {
 
@@ -110,6 +120,8 @@ class Program
             }
         }
     }
+
+    // Método para atualizar atributos de produtos cadastrados
     static void AtualizarProduto(List<Produto> produtos)
     {
 
@@ -125,6 +137,7 @@ class Program
         {
             Produto? produtoParaAtualizar = null;
 
+            // Encontrar o produto com o código fornecido
             foreach (var produto in produtos)
             {
                 if (produto.Codigo == codigoAtualizar)
@@ -134,6 +147,7 @@ class Program
                 }
             }
 
+            // Se o produto foi encontrado
             if (produtoParaAtualizar != null)
             {
                 Console.WriteLine("\nQual atributo você deseja atualizar?" +
@@ -146,9 +160,12 @@ class Program
                 switch (opcaoAtualizar)
                 {
                     case "1":
+                        // Armazena a descrição antiga
+                        string descricaoAntiga = produtoParaAtualizar.Descricao;
                         Console.WriteLine("\nInsira a nova descrição do produto: ");
                         produtoParaAtualizar.Descricao = Console.ReadLine();
                         Console.WriteLine("Descrição atualizada com sucesso!");
+                        Console.WriteLine($"Descrição antiga: {descricaoAntiga} ; Nova descrição: {produtoParaAtualizar.Descricao}");
                         break;
                     case "2":
                         produtoParaAtualizar.ValorCusto = pegarValor("\nInsira o novo valor de Custo do produto: ");
@@ -162,6 +179,9 @@ class Program
                         double calculoMargem = (produtoParaAtualizar.ValorCusto * produtoParaAtualizar.MargemLucro) / 100;
                         produtoParaAtualizar.ValorVenda = produtoParaAtualizar.ValorCusto + calculoMargem;
                         break;
+                    /*case "4":
+                        AtualizarCodigoProduto(produtos, produtoParaAtualizar);
+                        break;*/
                     default:
                         Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
                         break;
@@ -174,21 +194,53 @@ class Program
         }
             
         }
-    }
+    /*static void AtualizarCodigoProduto(List<Produto> produtos, Produto produtoParaAtualizar)
+    {
+        Console.WriteLine("\nInsira o novo código para o produto: ");
+        if (int.TryParse(Console.ReadLine(), out int novoCodigo))
+        {
+            bool codigoExiste = produtos.Exists(p => p.Codigo == novoCodigo);
+            if (!codigoExiste)
+            {
+                produtoParaAtualizar.Codigo = novoCodigo;
+                Console.WriteLine("Código do Produto atualizado com sucesso!");
+            }
+            else
+            {
+                Console.WriteLine("O novo código de produto já está em uso. Por favor, escolha outro.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Código inválido. Por favor, insira um número inteiro válido.");
+        }
 
+    }*/
+}
+    
+
+// Classe que representa um Produto, todos os seus getters e setters
 public class Produto
 {
+    //private int codigo;
+
     public Produto(int _codigo)
     {
         this.Codigo = _codigo;
     }
 
+    /*public int Codigo
+    {
+        get { return codigo; }
+        set { codigo = value; }
+    }*/
     public int Codigo { get; }
     public string Descricao { get; set; }
     public double ValorVenda { get; set; }
     public double ValorCusto { get; set; }
     public double MargemLucro { get; set; }
 
+    // Sobrescrita do método ToString para formatar a exibição do produto
     public override string ToString()
     {
         return $"\n--------------------\nCódigo: {Codigo} \nDescrição: {Descricao}\nValor de Custo: R${ValorCusto} \nMargem de Lucro: {MargemLucro}%\nValor de Venda: R${ValorVenda}\n--------------------";
